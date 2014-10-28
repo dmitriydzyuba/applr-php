@@ -17,7 +17,32 @@ class BasicTag
 		return 'add' . $this->_toCamelCase(substr($property, 0, -1));
 	}
 
-	public function toXML() {
+	protected function getGetterName($property) {
+		return 'get' . $this->_toCamelCase($property);
+	}
 
+	public function toXML() {
+		$xml = '';
+
+		if (isset($this->_root_tag)) {
+			$xml .= '<'.$this->_root_tag.'>';
+		}
+
+		foreach ($this->_attributes as $attribute) {
+			$getter = $this->getGetterName($attribute);
+			if (method_exists($this, $getter)) {
+				$value = $this->$getter();
+			}
+
+			$xml .= '<'.$attribute.'>';
+				$xml .= $value;
+			$xml .= '</'.$attribute.'>';
+		}
+
+		if (isset($this->_root_tag)) {
+			$xml .= '</'.$this->_root_tag.'>';
+		}
+
+		return $xml;
 	}
 }

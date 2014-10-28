@@ -20,6 +20,10 @@ class Job extends BasicTag
 
 	private $_questions = array();
 
+	protected $_attributes = array('reference', 'logo', 'redirect_url', 'title', 'description');
+
+	protected $_root_tag = 'job';
+
 	function __construct($job = array()) {
 		if (is_array($job) and $job) {
 			foreach ($job as $property => $prop_value) {
