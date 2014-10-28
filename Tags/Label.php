@@ -2,33 +2,34 @@
 
 namespace Applr\Tags;
 
-class Label
+class Label extends BasicTag
 {
 	private $_label = '';
 
 	private $_name = '';
 
-	function __construct() {
-
+	function __construct($label) {
+		if (isset($label['label'])) {
+			$this->setLabel($label['label']);
+		}
+		if (isset($label['name'])) {
+			$this->setName($label['name']);
+		}
 	}
 
 	public function setLabel($label) {
-
+		$this->_label = $label;
 	}
 
 	public function getLabel() {
-
+		return $this->_label;
 	}
 
 	public function setName($name) {
-
+		$this->_name = $name;
 	}
 
 	public function getName() {
-
-	}
-
-	public function toXML() {
-
+		return $this->_name;
 	}
 }

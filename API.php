@@ -46,6 +46,10 @@ class API {
 		$this->_apiKey = $apiKey;
 	}
 
+	public function createJob($job = array()) {
+		$this->job = new Tags\Job($job);
+	}
+
 	public function postXML($xml) {
 		return $this->_makeCall('jobs', null, $xml);
 	}
