@@ -50,6 +50,10 @@ class API {
 		$this->job = new Tags\Job($job);
 	}
 
+	public function postJob() {
+		return $this->postXML($this->job->toXML());
+	}
+
 	public function postXML($xml) {
 		return $this->_makeCall('jobs', null, $xml);
 	}
@@ -105,7 +109,18 @@ class API {
 			rewind($verbose);
 			$verboseLog = stream_get_contents($verbose);
 
-			echo "Verbose information:\n<pre>", htmlspecialchars($verboseLog), "</pre>\n";
+			echo "<pre>\nVerbose information:\n", htmlspecialchars($verboseLog), "</pre>\n";
+		}
+
+		if ($response) {
+			$json_decoded = json_decode($response, true);
+			if ($json_decoded) {
+				return $json_decoded;
+			}
+
+			if (strpos($response, 'applr.io/l/') === 0) {
+				$response = array('job_path' => $response);
+			}
 		}
 
 		return $response;
