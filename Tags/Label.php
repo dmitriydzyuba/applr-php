@@ -8,6 +8,12 @@ class Label extends BasicTag
 
 	private $_name = '';
 
+	protected $_xml = array(
+		'tag' => 'label',
+		'attributes' => array('name'),
+		'element' => 'label'
+	);
+
 	function __construct($label) {
 		if (isset($label['label'])) {
 			$this->setLabel($label['label']);

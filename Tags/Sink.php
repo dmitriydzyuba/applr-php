@@ -8,6 +8,11 @@ class Sink extends BasicTag
 
 	private $_target = '';
 
+	protected $_xml = array(
+		'tag' => 'sink',
+		'attributes' => array('for', 'target')
+	);
+
 	function __construct($sink) {
 		if (isset($sink['for'])) {
 			$this->setFor($sink['for']);

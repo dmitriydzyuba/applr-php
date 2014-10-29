@@ -20,7 +20,29 @@ class Job extends BasicTag
 
 	private $_questions = array();
 
-	protected $_attributes = array('reference', 'logo', 'redirect_url', 'title', 'description');
+	protected $_xml = array(
+		'tag' => 'job',
+		'attributes' => array(),
+		'elements' => array(
+			'reference',
+			'logo',
+			'redirect_url',
+			'title',
+			'description',
+			'label' => array(
+				'elements' => 'labels',
+				'type' => 'foreach'
+			),
+			'sinks' => array(
+				'elements' => 'sinks',
+				'type' => 'in_parent'
+			),
+			'questions' => array(
+				'elements' => 'questions',
+				'type' => 'in_parent'
+			)
+		)
+	);
 
 	protected $_root_tag = 'job';
 
@@ -100,7 +122,7 @@ class Job extends BasicTag
 	}
 
 	public function getLabels() {
-		return $this->getLabels();
+		return $this->_labels;
 	}
 
 	public function addSink(array $sink) {

@@ -21,28 +21,102 @@ class BasicTag
 		return 'get' . $this->_toCamelCase($property);
 	}
 
-	public function toXML() {
+	protected function _processCurrentTag($tag) {
 		$xml = '';
 
-		if (isset($this->_root_tag)) {
-			$xml .= '<'.$this->_root_tag.'>';
-		}
+		if ($tag->_xml['tag']) {
+			$xml .= '<' . $tag->_xml['tag'];
 
-		foreach ($this->_attributes as $attribute) {
-			$getter = $this->getGetterName($attribute);
-			if (method_exists($this, $getter)) {
-				$value = $this->$getter();
+			/*
+			 * processing attributes
+			 * e.g. <tag attribute="value">
+			 */
+			foreach ($tag->_xml['attributes'] as $attribute) {
+				$getter = $this->getGetterName($attribute);
+				if (method_exists($tag, $getter)) {
+					$value = $tag->$getter();
+					if ($value) {
+						$xml .= ' ' . $attribute . '="' . $value . '"';
+					}
+				}
 			}
 
-			$xml .= '<'.$attribute.'>';
-				$xml .= $value;
-			$xml .= '</'.$attribute.'>';
-		}
+			/*
+			 * processing elements inside tag
+			 */
 
-		if (isset($this->_root_tag)) {
-			$xml .= '</'.$this->_root_tag.'>';
+			if ($tag->_xml['elements'] || $tag->_xml['element']) {
+				$xml .= '>';
+				if ($tag->_xml['elements']) {
+
+					/*
+					 * complex elements (array of elements)
+					 * e.g. <tag><element1>value1</element1><element2>value2</element2></tag>
+					 */
+
+					foreach ($tag->_xml['elements'] as $element_key => $element) {
+						//complex elements (array) with foreach processing
+						if (is_array($element)) {
+							if ($element['type'] == 'in_parent') {
+								$xml .= '<' . $element_key . '>';
+							}
+							$getter = $this->getGetterName($element['elements']);
+							if (method_exists($tag, $getter)) {
+								$arr_objects = $tag->$getter();
+								foreach ($arr_objects as $object) {
+									$xml .= $this->_processCurrentTag($object);
+								}
+							}
+							if ($element['type'] == 'in_parent') {
+								$xml .= '</' . $element_key . '>';
+							}
+							//simple element
+						} elseif (is_string($element)) {
+							$getter = $this->getGetterName($element);
+							if (method_exists($tag, $getter)) {
+								$value = $tag->$getter();
+							}
+							if ($value) {
+								//in case element inside tag is tag we need to process it
+								if (is_object($value)) {
+									$xml .= $this->_processCurrentTag($value);
+									//if it's just a value then insert it in tag
+								} else {
+									$xml .= '<'.$element.'>';
+										$xml .= $value;
+									$xml .= '</'.$element.'>';
+								}
+							}
+						}
+					}
+
+					/*
+					 * simple element
+					 * e.g. <tag>element</tag>
+					 */
+
+				} elseif ($tag->_xml['element']) {
+					$getter = $this->getGetterName($tag->_xml['element']);
+					if (method_exists($tag, $getter)) {
+						$value = $tag->$getter();
+					}
+					if ($value) {
+						$xml .= $value;
+					}
+				}
+
+				//closing tag
+				$xml .= '</' . $tag->_xml['tag'] . '>';
+			} else {
+				//closing tag
+				$xml .= '/>';
+			}
 		}
 
 		return $xml;
+	}
+
+	public function toXML() {
+		return $this->_processCurrentTag($this);
 	}
 }

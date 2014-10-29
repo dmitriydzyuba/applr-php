@@ -8,6 +8,12 @@ class Answer extends BasicTag
 
 	private $_ans_tag;
 
+	protected $_xml = array(
+		'tag' => 'answer',
+		'element' => 'answer',
+		'attributes' => array('ans_tag')
+	);
+
 	function __construct($answer) {
 		if (isset($answer['answer'])) {
 			$this->setAnswer($answer['answer']);
@@ -17,19 +23,19 @@ class Answer extends BasicTag
 		}
 	}
 
-	private function setAnswer($answer) {
+	public function setAnswer($answer) {
 		$this->_answer = $answer;
 	}
 
-	private function getAnswer() {
+	public function getAnswer() {
 		return $this->_answer;
 	}
 
-	private function setAnsTag($_ans_tag) {
+	public function setAnsTag($_ans_tag) {
 		$this->_ans_tag = $_ans_tag;
 	}
 
-	private function getAnsTag() {
+	public function getAnsTag() {
 		return $this->_ans_tag;
 	}
 }

@@ -10,9 +10,19 @@ class Question extends BasicTag
 
 	private $_style;
 
-	private $_limit;
-
 	private $_answers = array();
+
+	protected $_xml = array(
+		'tag' => 'question',
+		'attributes' => array('style', 'name'),
+		'elements' => array(
+			'ask',
+			'answer' => array(
+				'elements' => 'answers',
+				'type' => 'foreach'
+			)
+		)
+	);
 
 	function __construct($question = array()) {
 		if (is_array($question) and $question) {
@@ -28,7 +38,7 @@ class Question extends BasicTag
 						}
 						break;
 					case 'answers':
-						$this->addAnswer($prop_value);
+						$this->addAnswers($prop_value);
 						break;
 					default:
 						break;
@@ -46,7 +56,10 @@ class Question extends BasicTag
 	}
 
 	public function setAsk($ask) {
-		$this->_ask = $ask;
+		if (!$this->_ask) {
+			$this->_ask = new Ask();
+		}
+		$this->_ask->setAsk($ask);
 	}
 
 	public function getAsk() {
@@ -62,11 +75,24 @@ class Question extends BasicTag
 	}
 
 	public function setLimit($limit) {
-		$this->_limit = $limit;
+		if (!$this->_ask) {
+			$this->_ask = new Ask();
+		}
+		$this->_ask->setLimit($limit);
 	}
 
 	public function getLimit() {
-		return $this->_limit;
+		if ($this->_ask) {
+			return $this->_ask->getLimit();
+		}
+
+		return false;
+	}
+
+	public function addAnswers($answers) {
+		foreach ($answers as $answer) {
+			$this->addAnswer($answer);
+		}
 	}
 
 	public function addAnswer($answer) {
