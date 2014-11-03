@@ -78,6 +78,7 @@ class API {
 		curl_setopt($this->_ch, CURLOPT_HTTPHEADER, $headerData);
 		curl_setopt($this->_ch, CURLOPT_CONNECTTIMEOUT, 20);
 		curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($this->_ch, CURLOPT_USERAGENT, 'applr-php');
 
 		if ($data) {
 			curl_setopt($this->_ch, CURLOPT_POST, true);
