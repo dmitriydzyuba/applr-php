@@ -82,7 +82,7 @@ class API {
 
 		if ($data) {
 			curl_setopt($this->_ch, CURLOPT_POST, true);
-			curl_setopt($this->_ch, CURLOPT_POSTFIELDS,  array($data));
+			curl_setopt($this->_ch, CURLOPT_POSTFIELDS, $data);
 		}
 
 		if ($this->_debug) {
