@@ -83,7 +83,7 @@ class BasicTag
 									//if it's just a value then insert it in tag
 								} else {
 									$xml .= '<'.$element.'>';
-										$xml .= $value;
+										$xml .= '<![CDATA[' . $value . ']]>';
 									$xml .= '</'.$element.'>';
 								}
 							}
@@ -101,7 +101,7 @@ class BasicTag
 						$value = $tag->$getter();
 					}
 					if ($value) {
-						$xml .= $value;
+						$xml .= '<![CDATA[' . $value . ']]>';
 					}
 				}
 
