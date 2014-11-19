@@ -126,4 +126,16 @@ class API {
 
 		return $response;
 	}
+
+	public static function isApiKeyValid($api_key) {
+		$result = false;
+
+		$response = file_get_contents(self::API_ENDPOINT . '/api_keys/status?token=' . $api_key);
+
+		if ($response == 'Key is Valid') {
+			$result = true;
+		}
+
+		return $result;
+	}
 }
