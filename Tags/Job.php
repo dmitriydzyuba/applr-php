@@ -20,6 +20,8 @@ class Job extends BasicTag
 
 	private $_questions = array();
 
+	private $_geo_location;
+
 	protected $_xml = array(
 		'tag' => 'job',
 		'attributes' => array(),
@@ -40,7 +42,8 @@ class Job extends BasicTag
 			'questions' => array(
 				'elements' => 'questions',
 				'type' => 'in_parent'
-			)
+			),
+			'geo_location'
 		)
 	);
 
@@ -55,6 +58,7 @@ class Job extends BasicTag
 					case 'redirect_url':
 					case 'title':
 					case 'description':
+					case 'geo_location':
 						$setter = $this->getSetterName($property);
 						if (method_exists($this, $setter)) {
 							call_user_func(array(&$this, $setter), $prop_value);
@@ -139,5 +143,19 @@ class Job extends BasicTag
 
 	public function getQuestions() {
 		return $this->_questions;
+	}
+
+	/**
+	 * @param mixed $geo_location
+	 */
+	public function setGeoLocation($geo_location) {
+		$this->_geo_location = new GeoLocation($geo_location);
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getGeoLocation() {
+		return $this->_geo_location;
 	}
 }
