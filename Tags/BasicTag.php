@@ -119,4 +119,15 @@ class BasicTag
 	public function toXML() {
 		return $this->_processCurrentTag($this);
 	}
+
+	protected function _setPropertes($properties) {
+		if (is_array($properties) and $properties) {
+			foreach ($properties as $property => $prop_value) {
+				$setter = $this->getSetterName($property);
+				if (method_exists($this, $setter)) {
+					call_user_func(array(&$this, $setter), $prop_value);
+				}
+			}
+		}
+	}
 }
