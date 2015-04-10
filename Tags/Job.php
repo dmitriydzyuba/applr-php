@@ -22,6 +22,8 @@ class Job extends BasicTag
 
 	private $_geo_location;
 
+    private $_videos = array();
+
 	protected $_xml = array(
 		'tag' => 'job',
 		'attributes' => array(),
@@ -43,7 +45,11 @@ class Job extends BasicTag
 				'elements' => 'questions',
 				'type' => 'in_parent'
 			),
-			'geo_location'
+			'geo_location',
+            'video' => array(
+                'elements' => 'videos',
+                'type' => 'foreach'
+            ),
 		)
 	);
 
@@ -68,6 +74,7 @@ class Job extends BasicTag
 					case 'labels':
 					case 'sinks':
 					case 'questions':
+                    case 'videos':
 						$adder = $this->getAdderName($property);
 						foreach ($prop_value as $prop_value_piece) {
 							if (method_exists($this, $adder)) {
@@ -158,4 +165,12 @@ class Job extends BasicTag
 	public function getGeoLocation() {
 		return $this->_geo_location;
 	}
+
+    public function addVideo(array $video) {
+        $this->_videos[] = new Video($video);
+    }
+
+    public function getVideos() {
+        return $this->_videos;
+    }
 }

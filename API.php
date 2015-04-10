@@ -20,6 +20,8 @@ class API {
 
 	const API_ENDPOINT = 'http://applr.io/api/';
 
+    const API_ENDPOINT_BETA = 'http://beta.applr.io/api/';
+
 	/**
 	 * API key
 	 */
@@ -42,6 +44,8 @@ class API {
 	 * Default reporting options
 	 * @var array
 	 */
+
+    private $environment = 'production';
 
 	protected $reporting_defaults = array(
 		'limit' => 100
@@ -79,7 +83,7 @@ class API {
 	}
 
 	protected function _makeCall($method, $params, $data) {
-		$apiCall = self::API_ENDPOINT . $method;
+		$apiCall = $this->getAPIEndpoint() . $method;
 
 		if (!$this->_ch) {
 			$this->_ch = curl_init();
@@ -147,10 +151,10 @@ class API {
 		return $response;
 	}
 
-	public static function isApiKeyValid($api_key) {
+	public function isApiKeyValid() {
 		$result = false;
 
-		$response = file_get_contents(self::API_ENDPOINT . '/api_keys/status?token=' . $api_key);
+		$response = file_get_contents($this->getAPIEndpoint() . '/api_keys/status?token=' . $this->_apiKey);
 
 		if ($response == 'Key is Valid') {
 			$result = true;
@@ -158,4 +162,20 @@ class API {
 
 		return $result;
 	}
+
+    protected function getAPIEndpoint() {
+        if ($this->environment == 'production') {
+            return self::API_ENDPOINT;
+        } else {
+            return self::API_ENDPOINT_BETA;
+        }
+    }
+
+    public function setEnvimonmentBeta() {
+        $this->environment = 'beta';
+    }
+
+    public function setEnvironmentProduction() {
+        $this->environment = 'production';
+    }
 }
