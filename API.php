@@ -178,4 +178,35 @@ class API {
     public function setEnvironmentProduction() {
         $this->environment = 'production';
     }
+
+	public function getServicesList() {
+		return $this->_makeCall('services/avalible', false, false);
+	}
+
+	public function getEnabledServicesList() {
+		return $this->_makeCall('services/enabled', array('api_key' => $this->_apiKey), false);
+	}
+
+	public function isServiceEnabled($service) {
+		$response = $this->_makeCall('services/is_enable', array(
+			'api_key' => $this->_apiKey,
+			'name' => $service
+		), false);
+
+		$result = false;
+
+		if ($response['service_enabled'] == 'Yes') {
+			$result = true;
+		}
+
+		return $result;
+	}
+
+	public function isVideoServiceEnabled() {
+		return $this->isServiceEnabled('Video Recording');
+	}
+
+	public function isGeoLocationEnabled() {
+		return $this->isServiceEnabled('Geo Location');
+	}
 }
