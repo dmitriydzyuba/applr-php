@@ -38,15 +38,6 @@ class API {
 
 	public $job;
 
-	/**
-	 * Default reporting options
-	 * @var array
-	 */
-
-	protected $reporting_defaults = array(
-		'limit' => 100
-	);
-
 	function __construct($apiKey) {
 		if (!$apiKey) {
 			throw new Exception\EmptyApiKeyException('Please provide API key');
@@ -71,13 +62,6 @@ class API {
 		return $this->_apiKey;
 	}
 
-	public function getReporting($options = array()) {
-		$options['token'] = $this->_getApiKey();
-		$options = array_merge($options, $this->reporting_defaults);
-
-		return $this->_makeCall('api_keys/reports.json', $options, null);
-	}
-
 	protected function _makeCall($method, $params, $data) {
 		$apiCall = self::API_ENDPOINT . $method;
 
@@ -89,10 +73,6 @@ class API {
 			'Accept: application',
 			'Authorization: Token token=' . $this->_getApiKey()
 		);
-
-		if (is_array($params) and $params) {
-			$apiCall .= '?' . http_build_query($params);
-		}
 
 		curl_setopt($this->_ch, CURLOPT_URL, $apiCall);
 		curl_setopt($this->_ch, CURLOPT_HTTPHEADER, $headerData);
