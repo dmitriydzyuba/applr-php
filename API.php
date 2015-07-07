@@ -51,12 +51,16 @@ class API {
 		'limit' => 100
 	);
 
-	function __construct($apiKey) {
+	function __construct($apiKey, $environment = 'production') {
 		if (!$apiKey) {
 			throw new Exception\EmptyApiKeyException('Please provide API key');
 		}
 
 		$this->_apiKey = $apiKey;
+
+		if ($environment == 'beta') {
+			$this->environment = 'beta';
+		}
 	}
 
 	public function createJob($job = array()) {
