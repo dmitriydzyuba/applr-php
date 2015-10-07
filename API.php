@@ -38,6 +38,15 @@ class API {
 
 	public $job;
 
+	/**
+	 * Default reporting options
+	 * @var array
+	 */
+
+	protected $reporting_defaults = array(
+		'limit' => 100
+	);
+
 	function __construct($apiKey) {
 		if (!$apiKey) {
 			throw new Exception\EmptyApiKeyException('Please provide API key');
