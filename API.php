@@ -18,7 +18,7 @@ class API {
 	 * API endpoint base url
 	 */
 
-	const API_ENDPOINT = 'http://applr.io/api/v1/';
+	const API_ENDPOINT = 'https://applr.io/api/v1/';
 
 	/**
 	 * API key
@@ -92,6 +92,7 @@ class API {
 		curl_setopt($this->_ch, CURLOPT_CONNECTTIMEOUT, 20);
 		curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($this->_ch, CURLOPT_USERAGENT, 'applr-php');
+		curl_setopt($this->_ch, CURLOPT_SSL_VERIFYPEER, false);
 
 		if ($data) {
 			curl_setopt($this->_ch, CURLOPT_POST, true);
