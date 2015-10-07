@@ -116,7 +116,7 @@ class API {
 			} elseif ($info['http_code'] == 400) {
 				throw new Exception\BadRequest($info['http_code'] . ': ' . $response);
 			} else {
-				throw new Exception\ApiCallException($info['http_code'] . ': ' . $response);
+				throw new Exception\ApiCallException($info['http_code'] . '('.$apiCall.'): ' . $response);
 			}
 		}
 
